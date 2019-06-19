@@ -1,26 +1,37 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace StrixLibrary_Example
 {
+    public interface IObserverSubjectExample
+    {
+        void Damaged(int iDamageAmount);
+        void Recovery(int iAmount);
+    }
+
     public class ObserverSubject_Example_Damager : MonoBehaviour
     {
-        ObserverSubject_Example_Legacy p_Monster_A;
-        ObserverSubject_Example_UseObserverPattern p_Monster_B;
+        IObserverSubjectExample[] arrExample;
 
         private void Awake()
         {
-            p_Monster_A = GetComponentInChildren<ObserverSubject_Example_Legacy>();
-            p_Monster_B = GetComponentInChildren<ObserverSubject_Example_UseObserverPattern>();
+            arrExample = FindObjectsOfType<MonoBehaviour>().OfType<IObserverSubjectExample>().ToArray();
         }
 
         private void Update()
         {
             if(Input.GetKeyDown(KeyCode.Alpha1))
             {
-                p_Monster_A.Damaged(1);
-                p_Monster_B.Damaged(1);
+                for (int i = 0; i < arrExample.Length; i++)
+                    arrExample[i].Damaged(1);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                for (int i = 0; i < arrExample.Length; i++)
+                    arrExample[i].Recovery(1);
             }
         }
     }

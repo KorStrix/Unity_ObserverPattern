@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace StrixLibrary_Example
 {
-    public class ObserverSubject_Example_UseObserverPattern : MonoBehaviour
+    public class ObserverSubject_Example_UseObserverPattern : MonoBehaviour, IObserverSubjectExample
     {
         public struct OnChangeHP_Arg
         {
@@ -32,6 +32,8 @@ namespace StrixLibrary_Example
         [SerializeField]
         private int _iHP_Current;
 
+        // ==============================================================================================
+
         public void Damaged(int iDamageAmount)
         {
             _iHP_Current -= iDamageAmount;
@@ -40,6 +42,17 @@ namespace StrixLibrary_Example
 
             p_Event_OnChangeHP.DoNotify(new OnChangeHP_Arg(this, true, _iHP_Current / (float)_iHP_Max));
         }
+
+        public void Recovery(int iAmount)
+        {
+            _iHP_Current += iAmount;
+            if (_iHP_Current > _iHP_Max)
+                _iHP_Current = _iHP_Max;
+
+            p_Event_OnChangeHP.DoNotify(new OnChangeHP_Arg(this, false, _iHP_Current / (float)_iHP_Max));
+        }
+
+        // ==============================================================================================
 
         private void Awake()
         {
